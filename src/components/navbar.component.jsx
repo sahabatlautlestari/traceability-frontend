@@ -2,12 +2,13 @@ import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 
 
-export default class Navbar extends Component {
+export default class MainNavbar extends Component {
     render() {
         return (
+            
             <nav className="navbar navbar-dark bg-dark navbar-expand-lg">                
                 <div className="container">
-                    <Link to="/" className="navbar-brand">TraceTales</Link>
+                    <Link to="/" className="navbar-brand">TraceGO</Link>
                     <div className="collapse navbar-collapse">
                         <ul className="navbar-nav mr-auto">
                             <li className="navbar-item">
