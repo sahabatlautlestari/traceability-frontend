@@ -4,7 +4,14 @@ import Map from './map.component';
 const googleMapsApiKey = "AIzaSyAK71oddySEAU-lgbjFO71_62w1j8sXji0";
 
 const TracingMap = props => {
-  const {places} = props;
+  const {places, labels} = props;
+  // const sumLat = places.reduce((a, b) => a.latitude + b.latitude);
+  // const avgLat = (sumLat / places.length) || 0;
+  // const sumLong = places.reduce((a, b) => a.longitude + b.longitude);
+  // const avgLong = (sumLong / places.length) || 0;
+  // console.log(sumLat);
+  // console.log(sumLong);
+  
 
   const {
     loadingElement,
@@ -22,10 +29,11 @@ const TracingMap = props => {
         '&libraries=geometry,drawing,places'
       }
       markers={places}
+      labels={labels}
       loadingElement={loadingElement || <div style={{height: `100%`}}/>}
       containerElement={containerElement || <div style={{height: "50vh"}}/>}
       mapElement={mapElement || <div style={{height: `100%`}}/>}
-      defaultCenter={defaultCenter || {lat: -8.714428466856226, lng: 115.22037359733135}}
+      defaultCenter={defaultCenter || {lat: places[0].latitude, lng: places[0].longitude}}
       defaultZoom={defaultZoom || 11}
     />
   );

@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { Component } from 'react';
 
 import {Table, Container, Row} from 'react-bootstrap';
+import NotFound from './not-found.component';
 import TracingMap from './tracing-map.component';
 
 const Trace = props => {
@@ -25,23 +26,26 @@ export default class Tracing extends Component {
     super(props);
     this.state = {
       traces: [], 
-      places: [
-        {latitude: 1.44754, longitude: 125.20691},
-        {latitude: -8.71443, longitude: 115.22037},
-        {latitude: -7.25669, longitude: 112.6863},
-      ],
-      productCode: ''
+      places: [],
+      labels: [],
+      productCode: '',
     };
   }
   
   componentDidMount() {
     const { productCode } = this.props.match.params;
-    axios.get(`http://tracetales.id:5005/trace/${productCode}`)
-      .then(res => {        
-        const _stages = res.data['data']['traces'];
-        const _places = _stages.map(trace => trace.coordinate);
-        this.setState({places: _places, productCode: productCode});
-        this.setState({traces: _stages});
+    let _stages;
+    let _places;
+    let _labels;
+    axios.get(`https://tracetales.id:5005/trace/${productCode}`)
+      .then(res => {
+        console.log(productCode);
+        if(res.data['data']['traces'].length > 0) {
+          _stages = res.data['data']['traces'];
+          _places = _stages.map(trace => trace.coordinate);
+          _labels = _stages.map(trace => trace.stage);
+        }
+        this.setState({traces: _stages, places: _places, productCode: productCode, labels: _labels});
       })
       .catch(err => {
         console.log(err);
@@ -55,13 +59,12 @@ export default class Tracing extends Component {
     })
   }
 
-  render() {
+  render() {    
     return (
       <Container>
         <Row>
-          <TracingMap defaultZoom={10} places={this.state.places}/>
-          <p></p>
-          <h1>Product Tracing {this.state.productCode}</h1>
+          {this.state.places.length > 0 ? <h1>Product Tracing {this.state.productCode}</h1> : <NotFound/>}
+          {this.state.places.length > 0 && 
           <Table>
             <thead>
                 <th>#</th>
@@ -79,30 +82,9 @@ export default class Tracing extends Component {
                 this.StageList()
               }
             </tbody>
-          </Table>
-          {/* <Nav justify variant="tabs" defaultActiveKey="/trace">
-            <Nav.Item>
-              <Nav.Link eventKey="Catch">Catch</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link eventKey="Landing">Landing</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link eventKey="Receiving">Receiving</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link eventKey="Cutting">Cutting</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link eventKey="Retouching">Retouching</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link eventKey="Packing">Packing</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link href="/trace">Buyer</Nav.Link>
-            </Nav.Item>
-          </Nav> */}
+          </Table>}
+          <p></p>
+          {this.state.places.length > 0 && <TracingMap defaultZoom={5} places={this.state.places} labels={this.state.labels}/>}
         </Row>
       </Container>
       

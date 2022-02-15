@@ -15,7 +15,7 @@ class MapDirectionsRenderer extends React.Component {
   };
 
   componentDidMount() {
-    const { places, travelMode } = this.props;
+    const { places } = this.props;
     
     const waypoints = places.map(p =>({
         location: {lat: p.latitude, lng:p.longitude},
@@ -31,8 +31,8 @@ class MapDirectionsRenderer extends React.Component {
       {
         origin: origin,
         destination: destination,
-        travelMode: travelMode,
-        waypoints: waypoints
+        //travelMode: travelMode,
+        //waypoints: waypoints
       },
       (result, status) => {
         if (status === google.maps.DirectionsStatus.OK) {
@@ -62,7 +62,7 @@ const Map = withScriptjs(
     >
       {props.markers.map((marker, index) => {
         const position = { lat: marker.latitude, lng: marker.longitude };
-        return <Marker key={index} position={position} />;
+        return <Marker key={index} position={position} label={props.labels[index]} />;
       })}
       <MapDirectionsRenderer
         places={props.markers}
