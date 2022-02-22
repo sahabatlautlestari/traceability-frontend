@@ -31,8 +31,8 @@ class MapDirectionsRenderer extends React.Component {
       {
         origin: origin,
         destination: destination,
-        //travelMode: travelMode,
-        //waypoints: waypoints
+        // travelMode: travelMode,
+        // waypoints: waypoints
       },
       (result, status) => {
         if (status === google.maps.DirectionsStatus.OK) {

@@ -84,7 +84,7 @@ export default class Tracing extends Component {
             </tbody>
           </Table>}
           <p></p>
-          {this.state.places.length > 0 && <TracingMap defaultZoom={5} places={this.state.places} labels={this.state.labels}/>}
+          {this.state.places.length > 0 && <TracingMap defaultZoom={2.3} places={this.state.places} labels={this.state.labels}/>}
         </Row>
       </Container>
       
